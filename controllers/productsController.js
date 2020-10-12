@@ -1,34 +1,31 @@
+const productsModel = require("../models/productsModels");
+
 module.exports = {
-    getAll: function (req, res, next) {
-        const products = [
-            {
-                id: 1,
-                name: "Moto G",
-                price: 1000
-            },
-            {
-                id: 2,
-                name: "Moto X",
-                price: 1500
-            }
-        ];
+    getAll: async (req, res, next) =>{
+        const products = await productsModel.find({});
         res.json(products);
     },
-    getById: function (req, res, next) {
-        const product = {
-            id: 1,
-            name: "Moto G",
-            price: 1000
-        };
+    getById: async function (req, res, next) {
+        const product = await productsModel.findById(req.params.id);
         res.json(product);
     },
     create: function(req, res, next){
-
+        const product = new productsModel({
+            name: req.body.name,
+            sku: req.body.sku,
+            description: req.body.description,
+            price: req.body.price,
+            quantity: req.body.quantity
+        });
+        product.save();
+        res.json(product);
     },
-    update: function(req, res, next){
-
+    update: async function(req, res, next){
+        const product = await productsModel.update({_id: req.params.id}, req.body, {multi: false});
+        res.json(product);
     },
-    delete: function(req, res, next){
-        
+    delete: async function(req, res, next){
+        const data = await productsModel.deleteOne({_id: req.params.id});
+        res.json(data);
     }
 }
