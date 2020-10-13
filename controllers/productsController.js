@@ -2,7 +2,7 @@ const productsModel = require("../models/productsModels");
 
 module.exports = {
     getAll: async (req, res, next) =>{
-        const products = await productsModel.find({});
+        const products = await productsModel.find({}).populate("category"); //find solo, muestra el ID de category; populate(campo a mostrar) muestra el detalle del campo
         res.json(products);
     },
     getById: async function (req, res, next) {
@@ -15,7 +15,8 @@ module.exports = {
             sku: req.body.sku,
             description: req.body.description,
             price: req.body.price,
-            quantity: req.body.quantity
+            quantity: req.body.quantity,
+            category: req.body.category //Id de la categoria con la cual se relaciona
         });
         product.save();
         res.json(product);
