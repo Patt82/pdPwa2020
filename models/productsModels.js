@@ -1,5 +1,15 @@
 const mongoose = require("../bin/mongodb");
 
+/**
+ * tagsSchema -> schema para subdocumento Tags
+ */  
+const tagsSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    }
+});
+
 const productsSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -34,7 +44,8 @@ const productsSchema = new mongoose.Schema({
         minlength: 1,
         required: true
     },
-    quantity: Number
+    quantity: Number,
+    tags: [tagsSchema] //Array porque puede tener multiples tags
 });
 
 module.exports = mongoose.model("products", productsSchema);

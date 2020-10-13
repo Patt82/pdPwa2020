@@ -16,7 +16,8 @@ module.exports = {
             description: req.body.description,
             price: req.body.price,
             quantity: req.body.quantity,
-            category: req.body.category //Id de la categoria con la cual se relaciona
+            category: req.body.category, //Id de la categoria con la cual se relaciona
+            tags: req.body.tags
         });
         product.save();
         res.json(product);

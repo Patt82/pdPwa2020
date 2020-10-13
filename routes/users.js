@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
+const usersAdminController = require("../controllers/usersAdminController");
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+router.post("/register", usersAdminController.create);
+router.post("/login", usersAdminController.validate);
+
 
 module.exports = router;
