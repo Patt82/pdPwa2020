@@ -7,8 +7,11 @@ var logger = require('morgan');
 var usersRouter = require('./routes/users');
 var productsRouter = require("./routes/products");
 var categoriesRouter = require ("./routes/categories");
+const jwt = require("jsonwebtoken");
 
 var app = express();
+
+app.set("secretKey", "pdPwa2020");
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -22,7 +25,21 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/users', usersRouter);
 app.use("/products", productsRouter);
-app.use("/categories", categoriesRouter);
+app.use("/categories", validateUser, categoriesRouter);
+
+//Middleware que valida un user
+function validateUser(req, res, next){
+  jwt.verify(req.headers["x-access-token"], req.app.get("secretKey"), function (err, decoded){ // jwt.verify verifica si un token es válido o no
+    if (err){
+      res.json({message: err.message});
+    }else{
+      req.body.tokenData = decoded; //Decoded tiene los datos asociados al momento de crearse el token, en este caso, UserID. Se guarda en el body con el nombre tokenData
+      next();
+    }
+  }); 
+}
+
+app.validateUser = validateUser;
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
