@@ -14,10 +14,10 @@ const productsSchema = new mongoose.Schema({
     name: {
         type: String,
         index: true,
-        minlength: 1,
+        minlength: [1, "Se debe colocar al menos un caracter"],
         maxlength: 255,
         trim: true,
-        required: true
+        required: [true, "El campo name es obligatorio"]
     },
     sku: {
         type: String,
