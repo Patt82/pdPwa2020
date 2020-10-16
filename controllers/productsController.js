@@ -2,12 +2,28 @@ const productsModel = require("../models/productsModels");
 
 module.exports = {
     getAll: async (req, res, next) => {
-        const products = await productsModel.find({}).populate("category"); //find solo, muestra el ID de category; populate(campo a mostrar) muestra el detalle del campo
-        res.status(200).json(products);
+        try {
+            console.log(req.body.tokenData);
+            const products = await productsModel.find({}).populate("category"); //find solo, muestra el ID de category; populate(campo a mostrar) muestra el detalle del campo
+            res.status(200).json(products);
+        } catch (e) {
+            next(e);
+        }
+
     },
     getById: async function (req, res, next) {
-        const product = await productsModel.findById(req.params.id);
-        res.status(200).json(product);
+        try {
+            console.log(req.params.id);
+            const product = await productsModel.findById(req.params.id);
+            if (!product) {
+                res.status(200).json({ msg: "El producto no existe" });
+                return; //Siempre después de un res con varias opciones de salida, para cortar la ejecuión
+            }
+            res.status(200).json(product);
+        } catch (e) {
+            next(e);
+        }
+
     },
     create: async function (req, res, next) {
         try {
@@ -30,11 +46,23 @@ module.exports = {
 
     },
     update: async function (req, res, next) {
-        const product = await productsModel.update({ _id: req.params.id }, req.body, { multi: false });
-        res.status(201).json(product);
+        try {
+            console.log(req.params.id, req.body);
+            const product = await productsModel.update({ _id: req.params.id }, req.body, { multi: false });
+            res.status(200).json(product);
+        } catch (e) {
+            next(e);
+        }
+
     },
     delete: async function (req, res, next) {
-        const data = await productsModel.deleteOne({ _id: req.params.id });
-        res.status(201).json(data);
+        try {
+            console.log(req.params.id);
+            const data = await productsModel.deleteOne({ _id: req.params.id });
+            res.status(200).json(data);
+        } catch (e) {
+            next(e);
+        }
+
     }
 }

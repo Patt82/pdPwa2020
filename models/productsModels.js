@@ -1,4 +1,5 @@
 const mongoose = require("../bin/mongodb");
+const errorMessage = require("../util/errorMessage");
 
 /**
  * tagsSchema -> schema para subdocumento Tags
@@ -14,18 +15,16 @@ const productsSchema = new mongoose.Schema({
     name: {
         type: String,
         index: true,
-        minlength: [1, "Se debe colocar al menos un caracter"],
-        maxlength: 255,
+        maxlength: [255, errorMessage.GENERAL.maxlength],
         trim: true,
-        required: [true, "El campo name es obligatorio"]
+        required: [true, errorMessage.GENERAL.campo_obligatorio]
     },
     sku: {
         type: String,
         unique: true,
-        minlength: 1,
-        maxlength: 255,
+        maxlength: [255, errorMessage.GENERAL.maxlength],
         trim: true,
-        required: true
+        required: [true, errorMessage.GENERAL.campo_obligatorio]
     },
     description: {
         type: String,
@@ -41,8 +40,8 @@ const productsSchema = new mongoose.Schema({
     },
     price: {
         type: Number,
-        minlength: 1,
-        required: true
+        min: [1, errorMessage.GENERAL.minlength],
+        required: [true, errorMessage.GENERAL.campo_obligatorio]
     },
     quantity: Number,
     tags: [tagsSchema] //Array porque puede tener multiples tags
