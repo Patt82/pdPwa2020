@@ -42,4 +42,19 @@ userSchema.pre("save", function (next) {
     this.password = bcrypt.hashSync(this.password, 10); // pisa el password sin encriptar del objeto creado, con la encriptación de bcrypt.
     next();
 });
+
+//Método estático creado en el modelo
+userSchema.statics.validateUser = async function (user, password){
+    const userAdmin = await this.model("usersAdmin").findOne({user: user});
+    if (userAdmin) {
+        if (bcrypt.compareSync(password, userAdmin.password)) { //compareSync toma 2 parámetros, pass sin encriptar y pass encriptado, para chequear autenticación
+            return {error: false, message: "User ok", userAdmin: userAdmin};
+        } else {
+            return {error: true, message: "Wrong password"};
+        }
+    } else {
+        return {error: true, message: "Wrong user" };
+    }   
+}
+
 module.exports = mongoose.model("usersAdmin", userSchema);

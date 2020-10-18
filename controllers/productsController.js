@@ -1,5 +1,5 @@
 const productsModel = require("../models/productsModels");
-
+const categoriesModel = require("../models/categoriesModel");
 module.exports = {
     getAll: async (req, res, next) => {
         try {
@@ -14,7 +14,8 @@ module.exports = {
     getById: async function (req, res, next) {
         try {
             console.log(req.params.id);
-            const product = await productsModel.findById(req.params.id);
+            //.select() entre paréntesis los campos que quiero recuperar
+            const product = await (await productsModel.findById(req.params.id).select("name price"));
             if (!product) {
                 res.status(200).json({ msg: "El producto no existe" });
                 return; //Siempre después de un res con varias opciones de salida, para cortar la ejecuión
@@ -27,6 +28,11 @@ module.exports = {
     },
     create: async function (req, res, next) {
         try {
+            const category = categoriesModel.findByIdAndValidate(req.body.category);
+            if(category.error){
+                res.json(categoria);
+                return;
+            }
             const product = new productsModel({
                 name: req.body.name,
                 sku: req.body.sku,
@@ -36,7 +42,7 @@ module.exports = {
                 category: req.body.category, //Id de la categoria con la cual se relaciona
                 tags: req.body.tags
             });
-            const docuement = await product.save();
+            const document = await product.save();
             res.status(201).json(document);
         } catch (e) {
             console.log(e);
