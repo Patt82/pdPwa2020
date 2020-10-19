@@ -55,5 +55,6 @@ productsSchema.statics.findByIdAndValidate = async function (id){
     }
     return document;
 }
-
+//Plugin aplica el plugin mongoosePaginate al productsSchema
+productsSchema.plugin(mongoose.mongoosePaginate);
 module.exports = mongoose.model("products", productsSchema);

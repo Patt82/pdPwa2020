@@ -8,10 +8,11 @@ var usersRouter = require('./routes/users');
 var productsRouter = require("./routes/products");
 var categoriesRouter = require ("./routes/categories");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 var app = express();
 
-app.set("secretKey", "pdPwa2020");
+app.set("secretKey", process.env.SECRET_KEY);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

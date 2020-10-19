@@ -4,7 +4,12 @@ module.exports = {
     getAll: async (req, res, next) => {
         try {
             console.log(req.body.tokenData);
-            const products = await productsModel.find({}).populate("category"); //find solo, muestra el ID de category; populate(campo a mostrar) muestra el detalle del campo
+            //const products = await productsModel.find({}).populate("category"); //find solo, muestra el ID de category; populate(campo a mostrar) muestra el detalle del campo
+            const products = await productsModel.paginate({}, {
+                sort: {name: 1},
+                populate: "category",
+                page: req.query.page || 1 //page indica que pagina quiero que devuelva
+            }); 
             res.status(200).json(products);
         } catch (e) {
             next(e);
