@@ -47,6 +47,7 @@ const productsSchema = new mongoose.Schema({
     tags: [tagsSchema] //Array porque puede tener multiples tags
 });
 
+
 //Método estático para validar que la categoría exista
 productsSchema.statics.findByIdAndValidate = async function (id){
     const document = await this.findById(id);

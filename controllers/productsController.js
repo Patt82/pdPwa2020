@@ -1,5 +1,6 @@
 const productsModel = require("../models/productsModels");
 const categoriesModel = require("../models/categoriesModel");
+
 module.exports = {
     getAll: async (req, res, next) => {
         try {
@@ -7,7 +8,7 @@ module.exports = {
             //const products = await productsModel.find({}).populate("category"); //find solo, muestra el ID de category; populate(campo a mostrar) muestra el detalle del campo
             const products = await productsModel.paginate({}, {
                 sort: {name: 1},
-                limit: 3,
+                limit: req.query.limit || 3,
                 populate: "category",
                 page: req.query.page || 1 //page indica que pagina quiero que devuelva
             }); 
