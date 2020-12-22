@@ -1,4 +1,4 @@
-const productsModel = require("../models/productsModels");
+const productsModel = require("../models/productsModel");
 const categoriesModel = require("../models/categoriesModel");
 
 module.exports = {
@@ -16,6 +16,7 @@ module.exports = {
         } catch (e) {
             next(e);
         }
+
 
     },
     getById: async function (req, res, next) {

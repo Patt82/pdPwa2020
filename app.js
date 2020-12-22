@@ -7,6 +7,7 @@ var logger = require('morgan');
 var usersRouter = require('./routes/users');
 var productsRouter = require("./routes/products");
 var categoriesRouter = require ("./routes/categories");
+var salesRouter = require ("./routes/sales");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
@@ -41,6 +42,8 @@ app.options("/*", function(req, res, next){
 app.use('/users', usersRouter);
 app.use("/products", validateUser, productsRouter);
 app.use("/categories", validateUser, categoriesRouter);
+app.use("/sales", salesRouter);
+
 
 //Middleware que valida un user
 function validateUser(req, res, next){
