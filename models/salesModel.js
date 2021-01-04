@@ -6,8 +6,7 @@ const salesSchema = new mongoose.Schema({
         type: Date,
         index: true,
         maxlength: [255, errorMessage.GENERAL.maxlength],
-        trim: true,
-        required: [true, errorMessage.GENERAL.campo_obligatorio]
+        trim: true
     },
     user_id: {
         type: mongoose.Schema.ObjectId,
@@ -19,8 +18,7 @@ const salesSchema = new mongoose.Schema({
     },
     price: {
         type: Number,
-        min: [1, errorMessage.GENERAL.minlength],
-        required: [true, errorMessage.GENERAL.campo_obligatorio]
+        min: [1, errorMessage.GENERAL.minlength]
     },
     product_name:{
         type: mongoose.Schema.ObjectId, //Id del documento. Relación a otra colección

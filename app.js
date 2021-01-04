@@ -42,7 +42,7 @@ app.options("/*", function(req, res, next){
 app.use('/users', usersRouter);
 app.use("/products", validateUser, productsRouter);
 app.use("/categories", validateUser, categoriesRouter);
-app.use("/sales", salesRouter);
+app.use("/sales", validateUser, salesRouter);
 
 
 //Middleware que valida un user
