@@ -1,31 +1,60 @@
+const { mongo } = require("../bin/mongodb");
 const mongoose = require("../bin/mongodb");
 const errorMessage = require("../util/errorMessage");
+const Schema = mongoose.Schema;
 
-const salesSchema = new mongoose.Schema({
-    date: {
-        type: Date,
-        index: true,
-        maxlength: [255, errorMessage.GENERAL.maxlength],
-        trim: true
-    },
-    user_id: {
-        type: mongoose.Schema.ObjectId,
-        ref: "users"
-    },
+var productSchema = new Schema({
     product_id: {
-        type: mongoose.Schema.ObjectId,
-        ref: "products"
+        type:Schema.ObjectId,
+        ref:"products"
+    },
+    name: {
+        type: String,
+        required: true
     },
     price: {
         type: Number,
-        min: [1, errorMessage.GENERAL.minlength]
+        required: true
+    }
+})
+
+const paymentSchema = new Schema({
+    amount: {
+        type: Number,
+        required: [true, "Mandatory field"],
+        trim: true,
+      },
+      method: {
+        type: String,
+        enum: ["mercadopago","efectivo"],
+        required: [true, "Mandatory field"],
+        trim: true,
+      },
+      status: {
+        type: String,
+        enum: ["generate", "pending", "inProcess", "approved", "cancelled", "rejected"],
+        required: [true, "Mandatory field"],
+        trim: true,
+      }
+
+})
+
+const salesSchema = new mongoose.Schema({
+    products: [productSchema],
+    payment: paymentSchema,
+
+    date: {
+        type: Date,
+        required: true,
+        default: Date.now
     },
-    product_name:{
-        type: mongoose.Schema.ObjectId, //Id del documento. Relación a otra colección
-        ref: "products"//Contra que colección se relaciona
+    total: {
+        type: Number,
+        required: true
     },
-    quantity: {
-        type: Number
+    user: {
+        type: Schema.ObjectId,
+        ref: "users"
     }
 });
 
