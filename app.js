@@ -40,7 +40,8 @@ app.options("/*", function(req, res, next){
 /** HEADER FIN */
 
 app.use('/users', usersRouter);
-app.use("/products", validateUser, productsRouter);
+//app.use("/products", validateUser, productsRouter);
+app.use("/products", productsRouter);
 app.use("/categories", validateUser, categoriesRouter);
 app.use("/sales", validateUser, salesRouter);
 
