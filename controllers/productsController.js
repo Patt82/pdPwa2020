@@ -6,12 +6,17 @@ module.exports = {
         try {
             console.log(req.body.tokenData);
             //const products = await productsModel.find({}).populate("category"); //find solo, muestra el ID de category; populate(campo a mostrar) muestra el detalle del campo
+            let queryFind = {};
+            if (req.query.search) {
+                queryFind = { name: { $regex: ".*" + req.query.search + ".*", $options: "i" } }
+            }
+            console.log(queryFind)
             const products = await productsModel.paginate({}, {
-                sort: {name: 1},
+                sort: { name: 1 },
                 limit: req.query.limit || 3,
                 populate: "category",
                 page: req.query.page || 1 //page indica que pagina quiero que devuelva
-            }); 
+            });
             res.status(200).json(products);
         } catch (e) {
             next(e);
@@ -37,7 +42,7 @@ module.exports = {
     create: async function (req, res, next) {
         try {
             const category = categoriesModel.findByIdAndValidate(req.body.category);
-            if(category.error){
+            if (category.error) {
                 res.json(categoria);
                 return;
             }
