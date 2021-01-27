@@ -6,6 +6,7 @@ router.get('/', productsController.getAll);
 router.get("/:id", productsController.getById);
 //router.post("/", (req, res, next) => {req.app.validateUser(req, res, next)}, productsController.create); //Llamado a validateUser para verificar token solo en post de products
 router.post("/", productsController.create);
+router.post("/upload", productsController.upload);
 router.put("/:id", productsController.update);
 router.delete("/:id", productsController.delete)
 

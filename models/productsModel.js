@@ -11,6 +11,17 @@ const tagsSchema = new mongoose.Schema({
     }
 });
 
+const imgSchema = new mongoose.Schema({
+    fieldname: "String",
+    originalname: "String",
+    encoding: "String",
+    mimetype: "String",
+    destination: "String",
+    filename: "String",
+    path: "String",
+    size: "String"
+})
+
 const productsSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -44,7 +55,8 @@ const productsSchema = new mongoose.Schema({
         required: [true, errorMessage.GENERAL.campo_obligatorio]
     },
     quantity: Number,
-    tags: [tagsSchema] //Array porque puede tener multiples tags
+    tags: [tagsSchema], //Array porque puede tener multiples tags
+    images: imgSchema 
 });
 
 
