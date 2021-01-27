@@ -11,7 +11,7 @@ module.exports = {
                 queryFind = { name: { $regex: ".*" + req.query.search + ".*", $options: "i" } }
             }
             console.log(queryFind)
-            const products = await productsModel.paginate({}, {
+            const products = await productsModel.paginate(queryFind, {
                 sort: { name: 1 },
                 limit: req.query.limit || 3,
                 populate: "category",
