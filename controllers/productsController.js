@@ -59,7 +59,7 @@ module.exports = {
                 price: req.body.price,
                 quantity: req.body.quantity,
                 category: req.body.category, //Id de la categoria con la cual se relaciona
-                images: req.body.images.path,
+                images: req.body.images,
                 tags: req.body.tags
             });
             const document = await product.save();
