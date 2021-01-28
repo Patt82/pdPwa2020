@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
         required: [true, errorMessage.GENERAL.campo_obligatorio],
         validate: {
             validator: async function (v) {
-                const document = await this.model("usersAdmin").findOne({ user: v });
+                const document = await this.model("usersWeb").findOne({ user: v });
                 if (document) {
                     return false;
                 }
@@ -23,7 +23,6 @@ const userSchema = new mongoose.Schema({
             },
             message: errorMessage.USERSADMIN.userExist
         },
-
     },
 
     password: {
@@ -31,30 +30,29 @@ const userSchema = new mongoose.Schema({
         required: [true, errorMessage.GENERAL.campo_obligatorio],
         validate: {
             validator: async function (v) {
-                return validators.isGoodPassword(v); // función declarada en utils para validar el password
+                return validators.isGoodPassword(v);
             },
             message: errorMessage.USERSADMIN.wrongPassword
         }
     }
 });
-//.pre => Middleware de mongoose - Previo a save, corre el middleware
+
 userSchema.pre("save", function (next) {
-    this.password = bcrypt.hashSync(this.password, 10); // pisa el password sin encriptar del objeto creado, con la encriptación de bcrypt.
+    this.password = bcrypt.hashSync(this.password, 10);
     next();
 });
 
-//Método estático creado en el modelo
-userSchema.statics.validateUser = async function (email, password){
-    const userWeb = await this.model("usersWeb").findOne({email: email});
+userSchema.statics.validateUser = async function (email, password) {
+    const userWeb = await this.model("usersWeb").findOne({ email: email });
     if (userWeb) {
-        if (bcrypt.compareSync(password, userWeb.password)) { //compareSync toma 2 parámetros, pass sin encriptar y pass encriptado, para chequear autenticación
-            return {error: false, message: "User ok", userWeb: userWeb};
+        if (bcrypt.compareSync(password, userWeb.password)) {
+            return { error: false, message: "User ok", userWeb: userWeb };
         } else {
-            return {error: true, message: "Wrong password"};
+            return { error: true, message: "Wrong password" };
         }
     } else {
-        return {error: true, message: "Wrong user" };
-    }   
+        return { error: true, message: "Wrong user" };
+    }
 }
 
 module.exports = mongoose.model("usersWeb", userSchema);

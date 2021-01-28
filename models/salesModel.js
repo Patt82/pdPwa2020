@@ -1,12 +1,10 @@
-const { mongo } = require("../bin/mongodb");
 const mongoose = require("../bin/mongodb");
-const errorMessage = require("../util/errorMessage");
 const Schema = mongoose.Schema;
 
 var productSchema = new Schema({
     product_id: {
-        type:Schema.ObjectId,
-        ref:"products"
+        type: Schema.ObjectId,
+        ref: "products"
     },
     name: {
         type: String,
@@ -23,19 +21,18 @@ const paymentSchema = new Schema({
         type: Number,
         required: [true, "Mandatory field"],
         trim: true,
-      },
-      method: {
+    },
+    method: {
         type: String,
-        enum: ["mercadopago","efectivo"],
+        enum: ["efectivo"],
         trim: true,
-      },
-      status: {
+    },
+    status: {
         type: String,
         enum: ["generate", "pending", "inProcess", "approved", "cancelled", "rejected"],
         required: [true, "Mandatory field"],
         trim: true,
-      }
-
+    }
 })
 
 const salesSchema = new mongoose.Schema({
@@ -56,6 +53,5 @@ const salesSchema = new mongoose.Schema({
         ref: "users"
     }
 });
-
 
 module.exports = mongoose.model("sales", salesSchema);

@@ -54,6 +54,9 @@ const productsSchema = new mongoose.Schema({
         min: [1, errorMessage.GENERAL.minlength],
         required: [true, errorMessage.GENERAL.campo_obligatorio]
     },
+    price_currency:{
+        type:String
+    },
     quantity: Number,
     tags: [tagsSchema], //Array porque puede tener multiples tags
     images: imgSchema 
@@ -69,14 +72,14 @@ productsSchema.statics.findByIdAndValidate = async function (id){
     return document;
 }
 
-productsSchema.virtual("image_path").get(function () {
-    if(this.images && this.images.filename){
-        return "http://localhost:3000/public/images/" + this.images.filename;
-    }else{
-        return null;
-    }
+// productsSchema.virtual("image_path").get(function () {
+//     if(this.images && this.images.filename){
+//         return "http://localhost:3000/public/images/" + this.images.filename;
+//     }else{
+//         return null;
+//     }
     
-})
+// })
 //Plugin aplica el plugin mongoosePaginate al productsSchema
 productsSchema.plugin(mongoose.mongoosePaginate);
 module.exports = mongoose.model("products", productsSchema);

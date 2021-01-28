@@ -5,13 +5,10 @@ const multer = require("multer");
 var DIR = "./public/images/"
 const upload = multer({ dest: DIR }).single('photo');
 
-
-
 module.exports = {
     getAll: async (req, res, next) => {
         try {
             console.log(req.body.tokenData);
-            //const products = await productsModel.find({}).populate("category"); //find solo, muestra el ID de category; populate(campo a mostrar) muestra el detalle del campo
             let queryFind = {};
             if (req.query.search) {
                 queryFind = { name: { $regex: ".*" + req.query.search + ".*", $options: "i" } }
@@ -20,32 +17,25 @@ module.exports = {
             const products = await productsModel.paginate(queryFind, {
                 sort: { name: 1 },
                 limit: req.query.limit || 20,
-                populate: "category",
-                // page: req.query.page || 1, //page indica que pagina quiero que devuelva
-                
+                populate: "category"                
             });
             console.log(products)
             res.status(200).json(products);
         } catch (e) {
             next(e);
         }
-
-
     },
     getById: async function (req, res, next) {
         try {
             console.log(req.params.id);
-            //.select() entre paréntesis los campos que quiero recuperar
-            const product = await (await productsModel.findById(req.params.id).select("name price description image_path"));
+            const product = await (await productsModel.findById(req.params.id).select("name price price_currency description images"));
             if (!product) {
-                res.status(200).json({ msg: "El producto no existe" });
-                return; //Siempre después de un res con varias opciones de salida, para cortar la ejecuión
+                res.status(200).json({ msg: "Product not found" });
             }
             res.status(200).json(product);
         } catch (e) {
             next(e);
         }
-
     },
     create: async function (req, res, next) {
         try {
@@ -59,8 +49,9 @@ module.exports = {
                 sku: req.body.sku,
                 description: req.body.description,
                 price: req.body.price,
+                price_currency: req.body.price_currency,
                 quantity: req.body.quantity,
-                category: req.body.category, //Id de la categoria con la cual se relaciona
+                category: req.body.category,
                 images: req.body.images,
                 tags: req.body.tags
             });
@@ -68,10 +59,9 @@ module.exports = {
             res.status(201).json(document);
         } catch (e) {
             console.log(e);
-            e.status = 204; //Sale por el catch, guarda en e un status no content para que lo use el error handler de app.js
+            e.status = 204; 
             next(e);
         }
-
     },
     update: async function (req, res, next) {
         try {
@@ -81,7 +71,6 @@ module.exports = {
         } catch (e) {
             next(e);
         }
-
     },
     delete: async function (req, res, next) {
         try {

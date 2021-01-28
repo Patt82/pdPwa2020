@@ -4,7 +4,6 @@ const categorySchema = new mongoose.Schema({
     name: String
 });
 
-//Método estático para validar que la categoría exista
 categorySchema.statics.findByIdAndValidate = async function (id){
     const document = await this.findById(id);
     if(!document){
