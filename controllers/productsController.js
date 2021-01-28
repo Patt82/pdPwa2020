@@ -19,10 +19,12 @@ module.exports = {
             console.log(queryFind)
             const products = await productsModel.paginate(queryFind, {
                 sort: { name: 1 },
-                limit: req.query.limit || 3,
+                limit: req.query.limit || 20,
                 populate: "category",
-                page: req.query.page || 1 //page indica que pagina quiero que devuelva
+                // page: req.query.page || 1, //page indica que pagina quiero que devuelva
+                
             });
+            console.log(products)
             res.status(200).json(products);
         } catch (e) {
             next(e);
@@ -34,7 +36,7 @@ module.exports = {
         try {
             console.log(req.params.id);
             //.select() entre paréntesis los campos que quiero recuperar
-            const product = await (await productsModel.findById(req.params.id).select("name price"));
+            const product = await (await productsModel.findById(req.params.id).select("name price description image_path"));
             if (!product) {
                 res.status(200).json({ msg: "El producto no existe" });
                 return; //Siempre después de un res con varias opciones de salida, para cortar la ejecuión

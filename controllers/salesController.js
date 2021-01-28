@@ -16,7 +16,7 @@ module.exports = {
                 .select(['_id', 'name', 'price'])
                 .where('_id').in(req.body.product_id)
 
-            if (products.length === 0) {
+            if (!products){
                 res.json({msg: "Product not find"});
                 return;
             }

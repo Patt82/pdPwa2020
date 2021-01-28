@@ -27,7 +27,6 @@ const paymentSchema = new Schema({
       method: {
         type: String,
         enum: ["mercadopago","efectivo"],
-        required: [true, "Mandatory field"],
         trim: true,
       },
       status: {
